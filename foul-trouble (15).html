@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foul Trouble — NCAA 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+.header{background:#1a1a1a;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.header-title{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.header-sub{font-size:11px;color:#888;margin-top:2px}
+.hright{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pulse{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.utext{font-size:11px;color:#aaa}
+.rbtn{background:transparent;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:6px;font-size:11px}
+.rbtn:hover{background:#333}
+.nav{background:#1a1a1a;border-bottom:1px solid #2a2a2a;display:flex;overflow-x:auto;padding:0 18px}
+.nbtn{background:transparent;border:none;border-bottom:2px solid transparent;color:#777;padding:11px 15px;font-size:13px;white-space:nowrap}
+.nbtn.active{color:#fff;border-bottom-color:#fff}
+.content{max-width:900px;margin:0 auto;padding:18px}
+.tab{display:none}.tab.active{display:block}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-bottom:14px}
+.metric{background:#fff;border:1px solid #e8e6e0;border-radius:8px;padding:11px 13px}
+.mlbl{font-size:10px;color:#999;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.mval{font-size:18px;font-weight:700}
+.srow{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #f0f0ee}
+.srow:last-child{border-bottom:none}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.sinf{flex:1;min-width:0}
+.snm{font-weight:600;font-size:14px}
+.sbk{font-size:11px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bwrap{height:3px;background:#f0f0ee;border-radius:99px;margin-top:5px;overflow:hidden}
+.bfill{height:100%;border-radius:99px}
+.spts{text-align:right}
+.pbig{font-size:22px;font-weight:700;line-height:1}
+.psub{font-size:10px;color:#999}
+.schamp{text-align:right;min-width:80px}
+.chip{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:500;margin:2px}
+.cc{background:#f0fdf4;color:#16a34a}
+.cw{background:#fef2f2;color:#dc2626;text-decoration:line-through}
+.cl{background:#eff6ff;color:#2563eb}
+.cp{background:#f5f5f3;color:#888}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.gcard{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:11px 13px}
+.gcard.live{border-color:#93c5fd}
+.gstat{font-size:10px;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.ldot{width:6px;height:6px;border-radius:50%;background:#2563eb;animation:blink 1.5s infinite;flex-shrink:0}
+.tln{display:flex;justify-content:space-between;align-items:center;margin-bottom:1px}
+.tnm{font-size:13px}.tnm.w{font-weight:700}
+.tsc{font-family:monospace;font-size:14px}.tsc.w{font-weight:700}
+.tpk{font-size:10px;color:#2563eb;margin-bottom:6px}
+.slbl{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ptab{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:7px;border:1px solid #e8e6e0;background:#fff;font-size:13px;color:#555}
+.plbl{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px;margin:12px 0 5px}
+.ctbl{width:100%;border-collapse:collapse;font-size:12px;min-width:460px}
+.ctbl th{text-align:center;padding:4px 5px;font-weight:600;font-size:11px}
+.ctbl th:first-child{text-align:left;font-weight:400;color:#999}
+.ctbl td{text-align:center;padding:5px 4px;border-top:1px solid #f0f0ee}
+.ctbl td:first-child{text-align:left;color:#999;font-size:11px;padding-left:8px}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px}
+.ba{background:#f0fdf4;color:#16a34a}.bs{background:#eff6ff;color:#2563eb}.bu{background:#fef2f2;color:#dc2626}
+.tscroll{overflow-x:auto}
+.note{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:13px 15px;font-size:12px;color:#666;line-height:1.8;margin-top:12px}
+.note strong{color:#333}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Foul Trouble 🏀</div>
+    <div class="header-sub">NCAA Men's Bracket Mayhem 2026</div>
+  </div>
+  <div class="hright">
+    <div class="pulse" id="pdot"></div>
+    <span class="utext" id="utext">Loading...</span>
+    <button class="rbtn" onclick="init()">&#8635; Refresh</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nbtn active" onclick="showTab('standings',this)">Standings</button>
+  <button class="nbtn" onclick="showTab('games',this)">Live Games</button>
+  <button class="nbtn" onclick="showTab('picks',this)">Picks</button>
+  <button class="nbtn" onclick="showTab('compare',this)">Compare</button>
+</div>
+
+<div class="content">
+  <div id="tab-standings" class="tab active"><div style="text-align:center;padding:2rem;color:#999">Loading...</div></div>
+  <div id="tab-games"     class="tab"><div style="text-align:center;padding:2rem;color:#999">Loading...</div></div>
+  <div id="tab-picks"     class="tab"></div>
+  <div id="tab-compare"   class="tab"></div>
+</div>
+
+<script>
+// ─── CONFIG ──────────────────────────────────────────────────────────────────
+// Set this to the raw GitHub URL of your picks.csv file, e.g.:
+// https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/picks.csv
+const PICKS_URL = 'https://raw.githubusercontent.com/YOURNAME/YOURREPO/main/picks.csv';
+
+// ─── NCAA API ────────────────────────────────────────────────────────────────
+const NCAA = 'https://ncaa-api.henrygd.me/scoreboard/basketball-men/d1';
+const DAYS = [
+  '2026/03/19','2026/03/20',
+  '2026/03/21','2026/03/22',
+  '2026/03/27','2026/03/28',
+  '2026/03/29','2026/03/30',
+  '2026/04/04','2026/04/06',
+];
+
+// ─── COLORS assigned per row order in CSV ────────────────────────────────────
+const COLORS = ['#378ADD','#1D9E75','#D85A30','#7F77DD','#BA7517','#5DCAA5','#E24B4A','#E67E22','#8E44AD'];
+
+// ─── NAME MAP: NCAA short name → canonical name used in picks.csv ─────────────
+// Add entries here if team names in the NCAA API don't match your CSV
+const NM = {
+  'Florida':'Florida','Duke':'Duke','Michigan':'Michigan',
+  'Michigan St.':'Michigan St.','Michigan State':'Michigan St.',
+  'Iowa St.':'Iowa St.','Iowa State':'Iowa St.',
+  'Arkansas':'Arkansas','Arizona':'Arizona',
+  'UConn':'Connecticut','Connecticut':'Connecticut',
+  "St. John's":"St. John's",
+  'Houston':'Houston','Illinois':'Illinois','Kansas':'Kansas',
+  'Kentucky':'Kentucky','UCLA':'UCLA','Purdue':'Purdue',
+  'Texas Tech':'Texas Tech','Virginia':'Virginia','Gonzaga':'Gonzaga',
+  'Alabama':'Alabama','Iowa':'Iowa','VCU':'VCU',
+  'Nebraska':'Nebraska','Vanderbilt':'Vanderbilt',
+  'Tennessee':'Tennessee','Texas':'Texas',
+  'N. Carolina':'N. Carolina','North Carolina':'N. Carolina',
+  'TCU':'TCU','High Point':'High Point','Wisconsin':'Wisconsin',
+  'Ohio St.':'Ohio St.','Ohio State':'Ohio St.',
+  'S. Florida':'South Florida','South Florida':'South Florida',
+  'N. Dakota St.':'N. Dak. St.','North Dakota St.':'N. Dak. St.',
+  'Penn':'Pennsylvania','Pennsylvania':'Pennsylvania',
+  "St. Mary's":"St. Mary's","Saint Mary's":"St. Mary's",
+  'Texas A&M':'Texas A&M','Troy':'Troy','McNeese':'McNeese',
+  "Hawai'i":'Hawaii','Hawaii':'Hawaii','Howard':'Howard','Siena':'Siena',
+  'Miami (FL)':'Miami FL','Miami FL':'Miami FL',
+  'Saint Louis':'Saint Louis','St. Louis':'Saint Louis',
+  'Georgia':'Georgia','BYU':'BYU','Louisville':'Louisville',
+  'Utah St.':'Utah St.','Utah State':'Utah St.',
+  'Akron':'Akron','Santa Clara':'Santa Clara','Villanova':'Villanova',
+  'LIU':'LIU','Wright St.':'Wright St.','Furman':'Furman',
+  'Tenn. State':'Tennessee St.','Tennessee State':'Tennessee St.',
+  'Hofstra':'Hofstra','Miami (OH)':'Miami OH',
+  'N. Iowa':'Northern Iowa','Northern Iowa':'Northern Iowa',
+  'UCF':'UCF','Queens':'Queens Univ.',
+  'Prairie View A&M':'Prairie View A&M','Prairie View':'Prairie View A&M',
+  'Missouri':'Missouri','Cal Baptist':'Cal Baptist',
+  'Kennesaw St.':'Kennesaw St.','Kennesaw State':'Kennesaw St.',
+  'Idaho':'Idaho',
+};
+const norm = n => NM[n] || n;
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let POOL  = [];
+let RES   = { r64:{}, r32:{}, s16:{}, e8:{}, ff:{}, champ:{} };
+let GAMES = [];
+let selP  = 0;
+
+// ─── CSV PARSER ───────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim() && !l.startsWith('#'));
+  const headers = csvRow(lines[0]);
+  return lines.slice(1).map((line, idx) => {
+    const v = csvRow(line);
+    const get = k => (v[headers.indexOf(k)] || '').trim();
+    const r32=[], s16=[], e8=[], ff=[];
+    for (let i=1;i<=32;i++) r32.push(get(`r32_${i}`));
+    for (let i=1;i<=16;i++) s16.push(get(`s16_${i}`));
+    for (let i=1;i<=8; i++) e8.push(get(`e8_${i}`));
+    for (let i=1;i<=4; i++) ff.push(get(`ff_${i}`));
+    return {
+      name:     get('name'),
+      bracket:  get('bracket'),
+      r64pts:   parseInt(get('r64pts')) || 0,
+      champion: get('champion'),
+      r32, s16, e8, ff,
+      color:    COLORS[idx % COLORS.length],
+      initials: get('name').slice(0,2).toUpperCase(),
+    };
+  }).filter(p => p.name);
+}
+
+function csvRow(row) {
+  const out=[]; let cur='', inQ=false;
+  for (const c of row) {
+    if (c==='"') inQ=!inQ;
+    else if (c===',' && !inQ) { out.push(cur); cur=''; }
+    else cur+=c;
+  }
+  out.push(cur);
+  return out;
+}
+
+// ─── ROUND DETECTION ─────────────────────────────────────────────────────────
+function getRound(g) {
+  const br = (g.bracketRound || g.round || '').toLowerCase();
+  if (/first round|round of 64/.test(br))               return 'r64';
+  if (/second round|round of 32/.test(br))              return 'r32';
+  if (/sweet 16|regional semi/.test(br))                return 's16';
+  if (/elite eight|elite 8|regional final/.test(br))    return 'e8';
+  if (/final four|national semi/.test(br))              return 'ff';
+  if (/national championship|championship/.test(br))    return 'champ';
+  // Date fallback
+  try {
+    const d = new Date(g.startDate || g.startTime || '');
+    const m = d.getMonth(), day = d.getDate();
+    if (m===2) { if(day<=20) return 'r64'; if(day<=22) return 'r32'; if(day<=28) return 's16'; return 'e8'; }
+    if (m===3) return day<=5 ? 'ff' : 'champ';
+  } catch(e) {}
+  return null;
+}
+
+// ─── FETCH ────────────────────────────────────────────────────────────────────
+async function fetchPicks() {
+  const res = await fetch(PICKS_URL + '?t=' + Date.now());
+  if (!res.ok) throw new Error(`picks.csv fetch failed (${res.status}). Is PICKS_URL set correctly?`);
+  return parseCSV(await res.text());
+}
+
+async function fetchDay(day) {
+  try {
+    const res = await fetch(`${NCAA}/${day}/all-conf`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.games || []).map(g => g.game || g);
+  } catch(e) { return []; }
+}
+
+async function fetchAllGames() {
+  const days = await Promise.all(DAYS.map(fetchDay));
+  const seen = new Set();
+  return days.flat().filter(g => {
+    const id = g.gameID || g.id || JSON.stringify(g).slice(0,80);
+    if (seen.has(id)) return false;
+    seen.add(id); return true;
+  });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
+  document.getElementById('pdot').style.background = '#facc15';
+  document.getElementById('utext').textContent = 'Updating...';
+  try {
+    const [pool, games] = await Promise.all([fetchPicks(), fetchAllGames()]);
+    POOL  = pool;
+    GAMES = games;
+
+    const nr = { r64:{}, r32:{}, s16:{}, e8:{}, ff:{}, champ:{} };
+    games.forEach(g => {
+      const state = (g.gameState || g.status || '').toLowerCase();
+      if (!/final|post|closed/.test(state)) return;
+      const aN = norm(g.away?.names?.short || g.away?.name || '');
+      const hN = norm(g.home?.names?.short || g.home?.name || '');
+      const aS = parseInt(g.away?.score) || 0;
+      const hS = parseInt(g.home?.score) || 0;
+      if (!aN || !hN || (!aS && !hS)) return;
+      const rk = getRound(g);
+      if (!rk) return;
+      if (aS > hS) { nr[rk][aN]=true;  nr[rk][hN]=false; }
+      else         { nr[rk][hN]=true;  nr[rk][aN]=false; }
+    });
+
+    RES = nr;
+    document.getElementById('utext').textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    document.getElementById('pdot').style.background = '#4ade80';
+    renderAll();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('pdot').style.background = '#f87171';
+    document.getElementById('utext').textContent = 'Error — see console';
+    document.getElementById('tab-standings').innerHTML =
+      `<div style="color:#dc2626;padding:1rem;font-size:13px">${e.message}</div>`;
+  }
+}
+
+// ─── SCORING ──────────────────────────────────────────────────────────────────
+function calcScore(p) {
+  let pts = p.r64pts;
+  p.s16.forEach(t => { if (RES.r32[t]) pts += 2; });
+  p.e8.forEach(t  => { if (RES.s16[t]) pts += 4; });
+  p.ff.forEach(t  => { if (RES.e8[t])  pts += 8; });
+  if (RES.ff[p.champion])    pts += 16;
+  if (RES.champ[p.champion]) pts += 32;
+  return pts;
+}
+
+function maxPts(p) {
+  let pts = calcScore(p);
+  // A team is "out" if it lost in any round
+  const out = t => ['r64','r32','s16','e8','ff'].some(r => RES[r][t]===false);
+  p.s16.forEach(t => { if (RES.r32[t]===undefined && !out(t)) pts += 2; });
+  p.e8.forEach(t  => { if (RES.s16[t]===undefined && !out(t)) pts += 4; });
+  p.ff.forEach(t  => { if (RES.e8[t]===undefined  && !out(t)) pts += 8; });
+  if (RES.ff[p.champion]===undefined    && !out(p.champion)) pts += 16;
+  if (RES.champ[p.champion]===undefined && !out(p.champion)) pts += 32;
+  return pts;
+}
+
+// ─── CHIP CLASS ───────────────────────────────────────────────────────────────
+function chipCls(t, rnd) {
+  const out = t => ['r64','r32','s16','e8','ff'].some(r => RES[r][t]===false);
+  if (out(t)) return 'cw';
+  const r = RES[rnd] && RES[rnd][t];
+  if (r===true)  return 'cc';
+  if (r===false) return 'cw';
+  const isLive = GAMES.some(g => {
+    const s = (g.gameState||g.status||'').toLowerCase();
+    const aN=norm(g.away?.names?.short||''), hN=norm(g.home?.names?.short||'');
+    return (aN===t||hN===t) && /live|in progress|^in$/.test(s);
+  });
+  return isLive ? 'cl' : 'cp';
+}
+
+function whoHas(t) {
+  return POOL.filter(p=>[...p.r32,...p.s16,...p.e8,...p.ff,p.champion].includes(t)).map(p=>p.name);
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderAll() {
+  if (!POOL.length) return;
+  renderStandings(); renderGames(); renderPicks(); renderCompare();
+}
+
+function currentRound() {
+  if (Object.keys(RES.champ).length) return 'Championship';
+  if (Object.keys(RES.ff).length)    return 'Final Four';
+  if (Object.keys(RES.e8).length)    return 'Elite Eight';
+  if (Object.keys(RES.s16).length)   return 'Sweet 16';
+  if (Object.keys(RES.r32).length)   return 'Round of 32';
+  return 'R64 done';
+}
+
+function renderStandings() {
+  const sc = POOL.map(p=>({...p,pts:calcScore(p),max:maxPts(p)})).sort((a,b)=>b.pts-a.pts);
+  const top = sc[0].pts;
+  const metrics = [
+    ['Leader', top+' pts'],
+    ['Gap', (top-sc[sc.length-1].pts)+' pts'],
+    ['Entries', POOL.length+''],
+    ['Round', currentRound()],
+  ].map(([l,v])=>`<div class="metric"><div class="mlbl">${l}</div><div class="mval">${v}</div></div>`).join('');
+
+  const rows = sc.map((p,i)=>{
+    const bon = p.pts-p.r64pts;
+    const out = ['r64','r32','s16','e8','ff'].some(r=>RES[r][p.champion]===false);
+    const cc  = RES.champ[p.champion]===true ? 'cc' : out ? 'cw' : 'cp';
+    return `<div class="srow">
+      <div style="font-size:12px;color:#999;min-width:16px;text-align:center">${i+1}</div>
+      <div class="av" style="width:36px;height:36px;background:${p.color}22;color:${p.color};font-size:11px">${p.initials}</div>
+      <div class="sinf">
+        <div class="snm">${p.name}</div>
+        <div class="sbk">${p.bracket}</div>
+        <div class="bwrap"><div class="bfill" style="width:${Math.round(p.pts/Math.max(top,1)*100)}%;background:${p.color}"></div></div>
+      </div>
+      <div class="spts"><div class="pbig">${p.pts}</div><div class="psub">base ${p.r64pts}${bon>0?' +'+bon:''}</div></div>
+      <div class="schamp"><span class="chip ${cc}">${p.champion}</span><div style="font-size:10px;color:#999;margin-top:3px">max ${p.max}</div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('tab-standings').innerHTML =
+    `<div class="mgrid">${metrics}</div>
+     <div class="card" style="padding:0">${rows}</div>
+     <div class="note"><strong>Scoring:</strong> R64=1pt locked &middot; R32 win=+2pts &middot; S16 win=+4pts &middot; E8 win=+8pts &middot; FF win=+16pts &middot; Champ=+32pts</div>`;
+}
+
+function renderGames() {
+  const allPicked = new Set(POOL.flatMap(p=>[...p.r32,...p.s16,...p.e8,...p.ff,p.champion]));
+  const tg = GAMES.filter(g=>{
+    const aN=norm(g.away?.names?.short||''), hN=norm(g.home?.names?.short||'');
+    return allPicked.has(aN)||allPicked.has(hN);
+  });
+
+  const stateOf = g => {
+    const s=(g.gameState||g.status||'').toLowerCase();
+    if (/final|post|closed/.test(s))            return 'post';
+    if (/live|in progress|^in$/.test(s))        return 'in';
+    return 'pre';
+  };
+
+  if (!tg.length) {
+    document.getElementById('tab-games').innerHTML='<div style="text-align:center;padding:3rem;color:#999">No tournament games loaded.</div>';
+    return;
+  }
+
+  const live = tg.filter(g=>stateOf(g)==='in');
+  const done = tg.filter(g=>stateOf(g)==='post').sort((a,b)=>new Date(b.startDate)-new Date(a.startDate)).slice(0,32);
+  const pre  = tg.filter(g=>stateOf(g)==='pre').sort((a,b)=>new Date(a.startDate)-new Date(b.startDate)).slice(0,20);
+
+  function gc(g) {
+    const aN=norm(g.away?.names?.short||g.away?.name||'');
+    const hN=norm(g.home?.names?.short||g.home?.name||'');
+    const aS=parseInt(g.away?.score)||0, hS=parseInt(g.home?.score)||0;
+    const st=stateOf(g), isPre=st==='pre', isL=st==='in';
+    const aW=st==='post'&&aS>hS, hW=st==='post'&&hS>aS;
+    const stat = isPre
+      ? new Date(g.startDate||'').toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})
+      : isL ? (g.contestClock||'Live') : 'Final';
+    const aP=whoHas(aN).join(', ')||'—', hP=whoHas(hN).join(', ')||'—';
+    return `<div class="gcard${isL?' live':''}">
+      <div class="gstat">${isL?'<div class="ldot"></div>':''}<span style="color:${isL?'#2563eb':'#999'}">${stat}</span></div>
+      <div class="tln"><span class="tnm${aW?' w':''}">${aN}</span>${!isPre?`<span class="tsc${aW?' w':''}">${aS}</span>`:''}</div>
+      <div class="tpk">${aP}</div>
+      <div class="tln"><span class="tnm${hW?' w':''}">${hN}</span>${!isPre?`<span class="tsc${hW?' w':''}">${hS}</span>`:''}</div>
+      <div class="tpk">${hP}</div>
+    </div>`;
+  }
+
+  const sec=(lbl,gs)=>gs.length?`<div class="slbl">${lbl}</div><div class="ggrid">${gs.map(gc).join('')}</div>`:'';
+  document.getElementById('tab-games').innerHTML = sec('Live',live)+sec('Completed',done)+sec('Upcoming',pre);
+}
+
+function renderPicks() {
+  const tabs = POOL.map((p,i)=>
+    `<button class="ptab${i===selP?' active':''}" onclick="selPlayer(${i})"
+      style="border-color:${i===selP?p.color:'#e8e6e0'};color:${i===selP?p.color:'#555'};background:${i===selP?p.color+'11':'#fff'}">
+      <span style="width:18px;height:18px;border-radius:50%;background:${p.color}33;color:${p.color};display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">${p.initials}</span>
+      ${p.name}</button>`).join('');
+
+  const p=POOL[selP], pts=calcScore(p);
+  const row=(lbl,items,rnd)=>`<div class="plbl">${lbl}</div><div>${items.map(t=>`<span class="chip ${chipCls(t,rnd)}">${t}</span>`).join('')}</div>`;
+
+  document.getElementById('tab-picks').innerHTML =
+    `<div class="ptabs">${tabs}</div>
+     <div class="card">
+       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f0f0ee">
+         <div class="av" style="width:44px;height:44px;background:${p.color}22;color:${p.color};font-size:14px">${p.initials}</div>
+         <div style="flex:1"><div style="font-weight:700;font-size:15px">${p.name}</div><div style="font-size:12px;color:#999">${p.bracket}</div></div>
+         <div style="text-align:right"><div style="font-size:28px;font-weight:700;line-height:1">${pts}</div><div style="font-size:11px;color:#999">base ${p.r64pts} &middot; +${pts-p.r64pts}</div></div>
+       </div>
+       ${row('Champion — 32 pts',[p.champion],'champ')}
+       ${row('Final Four — 8 pts each',p.ff,'e8')}
+       ${row('Elite Eight — 4 pts each',p.e8,'s16')}
+       ${row('Sweet Sixteen — 2 pts each',p.s16,'r32')}
+       <div style="margin-top:12px;font-size:11px;display:flex;gap:14px;flex-wrap:wrap">
+         <span style="color:#16a34a">&#10003; Won</span>
+         <span style="color:#dc2626">&#10007; Eliminated</span>
+         <span style="color:#2563eb">&#9654; Live</span>
+         <span style="color:#888">&#9675; Upcoming</span>
+       </div>
+     </div>`;
+}
+
+function renderCompare() {
+  const sc=POOL.map(p=>({...p,pts:calcScore(p)}));
+  const regions=['East','South','West','Midwest'];
+  const thead='<tr><th>Region</th>'+POOL.map(p=>`<th>${p.name}</th>`).join('')+'</tr>';
+  const tbody=regions.map((reg,ri)=>{
+    const vals=POOL.map(p=>p.ff[ri]||'—');
+    const u=[...new Set(vals)];
+    return `<tr><td>${reg}</td>${vals.map(v=>`<td><span class="badge ${u.length===1?'ba':u.length===vals.length?'bu':'bs'}">${v}</span></td>`).join('')}</tr>`;
+  }).join('')+
+  '<tr style="border-top:2px solid #e5e5e5"><td style="font-weight:600">Score</td>'+
+  POOL.map(p=>`<td style="font-weight:700;font-size:16px">${sc.find(s=>s.name===p.name).pts}</td>`).join('')+'</tr>';
+
+  const cm={};
+  POOL.forEach(p=>{(cm[p.champion]=cm[p.champion]||[]).push(p.name);});
+
+  document.getElementById('tab-compare').innerHTML =
+    `<div class="card">
+       <div style="font-weight:600;font-size:14px;margin-bottom:12px">Final Four picks by region</div>
+       <div class="tscroll"><table class="ctbl"><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>
+     </div>
+     <div class="card">
+       <div style="font-weight:600;font-size:14px;margin-bottom:12px">Champion picks</div>
+       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px">
+         ${Object.entries(cm).map(([t,ns])=>`<div style="background:#f8f8f6;border-radius:7px;padding:9px 11px"><div style="font-weight:600;font-size:13px">${t}</div><div style="font-size:11px;color:#999;margin-top:2px">${ns.join(', ')}</div></div>`).join('')}
+       </div>
+     </div>`;
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function selPlayer(i){ selP=i; renderPicks(); }
+
+init();
+setInterval(init, 60000);
+</script>
+</body>
+</html>

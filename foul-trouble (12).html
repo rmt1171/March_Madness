@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foul Trouble — NCAA 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+.header{background:#1a1a1a;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.header-title{font-size:20px;font-weight:700;letter-spacing:-0.5px}
+.header-sub{font-size:11px;color:#888;margin-top:2px}
+.hright{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.pulse{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.utext{font-size:11px;color:#888}
+.rbtn{background:transparent;border:1px solid #444;color:#aaa;padding:4px 10px;border-radius:6px;font-size:11px}
+.rbtn:hover{background:#333}
+.nav{background:#1a1a1a;border-bottom:1px solid #2a2a2a;display:flex;overflow-x:auto;padding:0 18px}
+.nbtn{background:transparent;border:none;border-bottom:2px solid transparent;color:#777;padding:11px 15px;font-size:13px;white-space:nowrap}
+.nbtn.active{color:#fff;border-bottom-color:#fff}
+.content{max-width:860px;margin:0 auto;padding:18px}
+.tab{display:none}.tab.active{display:block}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.card-title{font-weight:600;font-size:14px;margin-bottom:12px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin-bottom:14px}
+.metric{background:#fff;border:1px solid #e8e6e0;border-radius:8px;padding:11px 13px}
+.mlbl{font-size:10px;color:#999;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
+.mval{font-size:18px;font-weight:700}
+.srow{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid #f0f0ee}
+.srow:last-child{border-bottom:none}
+.srnk{font-size:12px;color:#999;min-width:16px;text-align:center}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.sinf{flex:1;min-width:0}
+.snm{font-weight:600;font-size:14px}
+.sbk{font-size:11px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bwrap{height:3px;background:#f0f0ee;border-radius:99px;margin-top:5px;overflow:hidden}
+.bfill{height:100%;border-radius:99px}
+.spts{text-align:right}
+.pbig{font-size:22px;font-weight:700;line-height:1}
+.psub{font-size:10px;color:#999}
+.schamp{text-align:right;min-width:80px}
+.chip{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:500;margin:2px}
+.cc{background:#f0fdf4;color:#16a34a}
+.cw{background:#fef2f2;color:#dc2626;text-decoration:line-through}
+.cl{background:#eff6ff;color:#2563eb}
+.cp{background:#f5f5f3;color:#888}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.gcard{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:11px 13px}
+.gcard.live{border-color:#93c5fd}
+.gstat{font-size:10px;color:#999;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.ldot{width:6px;height:6px;border-radius:50%;background:#2563eb;animation:blink 1.5s infinite;flex-shrink:0}
+.tln{display:flex;justify-content:space-between;align-items:center;margin-bottom:1px}
+.tnm{font-size:13px}.tnm.w{font-weight:700}
+.tsc{font-family:monospace;font-size:14px}.tsc.w{font-weight:700}
+.tpk{font-size:10px;color:#2563eb;margin-bottom:6px}
+.slbl{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.ptab{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:7px;border:1px solid #e8e6e0;background:#fff;font-size:13px;color:#555}
+.plbl{font-size:10px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.4px;margin:12px 0 5px}
+.ctbl{width:100%;border-collapse:collapse;font-size:12px;min-width:460px}
+.ctbl th{text-align:center;padding:4px 5px;font-weight:600;font-size:11px}
+.ctbl th:first-child{text-align:left;font-weight:400;color:#999}
+.ctbl td{text-align:center;padding:5px 4px;border-top:1px solid #f0f0ee}
+.ctbl td:first-child{text-align:left;color:#999;font-size:11px;padding-left:8px}
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px}
+.ba{background:#f0fdf4;color:#16a34a}.bs{background:#eff6ff;color:#2563eb}.bu{background:#fef2f2;color:#dc2626}
+.tscroll{overflow-x:auto}
+.note{background:#fff;border:1px solid #e8e6e0;border-radius:10px;padding:13px 15px;font-size:12px;color:#666;line-height:1.8;margin-top:12px}
+.note strong{color:#333}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Foul Trouble 🏀</div>
+    <div class="header-sub">NCAA Men's Bracket Mayhem 2026 · 7 entries</div>
+  </div>
+  <div class="hright">
+    <div class="pulse" id="pdot"></div>
+    <span class="utext" id="utext">Loading...</span>
+    <button class="rbtn" onclick="fetchAll()">&#8635; Refresh</button>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nbtn active" onclick="showTab('standings',this)">Standings</button>
+  <button class="nbtn" onclick="showTab('games',this)">Live Games</button>
+  <button class="nbtn" onclick="showTab('picks',this)">Picks</button>
+  <button class="nbtn" onclick="showTab('compare',this)">Compare</button>
+</div>
+
+<div class="content">
+  <div id="tab-standings" class="tab active">
+    <div class="mgrid" id="metrics"></div>
+    <div class="card" style="padding:0" id="slist"></div>
+    <div class="note">
+      <strong>Scoring:</strong> R64=1pt locked &middot; R32 win=+2pts &middot; S16 win=+4pts &middot; E8 win=+8pts &middot; FF win=+16pts &middot; Champ=+32pts
+    </div>
+  </div>
+  <div id="tab-games" class="tab">
+    <div id="gcontent"><div style="text-align:center;padding:3rem;color:#999">Loading...</div></div>
+  </div>
+  <div id="tab-picks" class="tab">
+    <div class="ptabs" id="ptabs"></div>
+    <div id="pcontent"></div>
+  </div>
+  <div id="tab-compare" class="tab">
+    <div class="card">
+      <div class="card-title">Final Four picks by region</div>
+      <div class="tscroll" id="ctable"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Champion picks</div>
+      <div id="cgrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px"></div>
+    </div>
+    <div class="note">
+      <strong>East:</strong> 5/7 have Duke. Zack has St. John's, Zach has Michigan St. alone.<br>
+      <strong>South:</strong> Most have Florida. Harrison has Houston reaching FF instead.<br>
+      <strong>West:</strong> 5/7 have Arizona. Reid alone has Arkansas.<br>
+      <strong>Midwest:</strong> Reid/Zach/Adam on Iowa St. vs Zack/Jacob/Steven/Harrison on Michigan.<br>
+      <strong>Champion:</strong> Michigan (Zack), Duke (Jacob), Mich St. (Steven), Arizona (Harrison+Adam), Florida (Reid+Zach).
+    </div>
+  </div>
+</div>
+
+<script>
+// ── POOL PICKS (verified from PDFs + Yahoo) ──────────────────────────────────
+// r64pts = Yahoo-locked R64 baseline, never recalculated
+// s16 = teams picked to WIN R32 (+2 each), e8 = WIN S16 (+4), ff = WIN E8 (+8)
+// champion = WIN FF (+16) + WIN championship (+32)
+const POOL = [
+  { name:"Reid",     bracket:"Reid's Rad Bracket",         color:"#378ADD", initials:"RE",
+    r64pts:9,  champion:"Florida",
+    ff:  ["Duke","Florida","Arkansas","Iowa St."],
+    e8:  ["Duke","Michigan St.","Florida","Illinois","Arkansas","Purdue","Michigan","Iowa St."],
+    s16: ["Duke","St. John's","Michigan St.","Connecticut","Florida","Vanderbilt","Illinois","Houston","Arkansas","Wisconsin","Gonzaga","Purdue","Michigan","Iowa St.","Virginia","Texas Tech"],
+    r64: ["Duke","TCU","St. John's","Kansas","Louisville","Michigan St.","UCLA","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","N. Carolina","Illinois","St. Mary's","Houston","Arkansas","Wisconsin","Texas","Gonzaga","Utah St.","Arizona","Miami FL","Purdue","Iowa St.","Virginia","Michigan","Saint Louis","Alabama","Texas Tech","Tennessee","Kentucky"] },
+  { name:"Zack",     bracket:"I am literally Jacob Klein", color:"#1D9E75", initials:"ZK",
+    r64pts:10, champion:"Michigan",
+    ff:  ["St. John's","Illinois","Arizona","Michigan"],
+    e8:  ["St. John's","Connecticut","Florida","Illinois","Arizona","Miami FL","Michigan","Virginia"],
+    s16: ["Duke","St. John's","Michigan St.","Connecticut","Florida","Nebraska","Illinois","Houston","Arizona","Arkansas","Texas","Gonzaga","Iowa St.","Virginia","Michigan","Alabama"],
+    r64: ["Duke","TCU","St. John's","Kansas","Louisville","Michigan St.","UCF","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","VCU","Illinois","Texas A&M","Houston","Arkansas","Wisconsin","Texas","Gonzaga","Utah St.","Arizona","Miami FL","Purdue","Kentucky","Iowa St.","Michigan","Saint Louis","Akron","Alabama","Tennessee","Virginia"] },
+  { name:"Zach",     bracket:"Chicken Nuggets ONLY",       color:"#D85A30", initials:"ZH",
+    r64pts:10, champion:"Florida",
+    ff:  ["Michigan St.","Florida","Arizona","Michigan"],
+    e8:  ["Duke","Michigan St.","Florida","Houston","Arizona","Purdue","Michigan","Iowa St."],
+    s16: ["Duke","St. John's","Michigan St.","UCLA","Florida","Nebraska","Illinois","Houston","Arizona","Arkansas","Texas","Gonzaga","Iowa St.","Iowa St.","Michigan","Texas Tech"],
+    r64: ["Duke","TCU","St. John's","Kansas","Louisville","Michigan St.","UCLA","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","VCU","Illinois","Texas A&M","Houston","Arkansas","Wisconsin","Texas","Gonzaga","Utah St.","Arizona","Miami FL","Purdue","Iowa St.","Santa Clara","Michigan","Saint Louis","Alabama","Texas Tech","Tennessee","Virginia"] },
+  { name:"Jacob",    bracket:"Reid's Ravenous Bracket",    color:"#7F77DD", initials:"JA",
+    r64pts:7,  champion:"Duke",
+    ff:  ["Duke","Florida","Arizona","Michigan"],
+    e8:  ["Duke","Michigan St.","Florida","N. Carolina","Gonzaga","Purdue","Michigan","Kentucky"],
+    s16: ["Duke","Kansas","Michigan St.","UCLA","Florida","Vanderbilt","N. Carolina","Houston","Arizona","Wisconsin","Gonzaga","Purdue","Michigan","Kentucky","Tennessee","Texas Tech"],
+    r64: ["Duke","Ohio St.","Kansas","Cal Baptist","Louisville","Michigan St.","UCLA","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","N. Carolina","Pennsylvania","Texas A&M","Houston","Arkansas","Wisconsin","BYU","Gonzaga","Villanova","Arizona","Miami FL","Purdue","Kentucky","Iowa St.","Michigan","Georgia","Alabama","Texas Tech","Tennessee","Virginia"] },
+  { name:"Steven",   bracket:"Chicken Fingers",            color:"#BA7517", initials:"ST",
+    r64pts:8,  champion:"Michigan St.",
+    ff:  ["Duke","Florida","Arizona","Michigan St."],
+    e8:  ["Duke","Michigan St.","Florida","N. Carolina","Gonzaga","Purdue","Michigan","Iowa St."],
+    s16: ["Duke","St. John's","Michigan St.","Connecticut","Florida","Nebraska","N. Carolina","Houston","Arizona","High Point","Texas","Gonzaga","Iowa St.","Virginia","Michigan","Alabama"],
+    r64: ["Duke","TCU","St. John's","Cal Baptist","Louisville","Michigan St.","UCF","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","N. Carolina","Illinois","Texas A&M","Houston","Arkansas","High Point","Texas","Gonzaga","Utah St.","Arizona","Missouri","Purdue","Iowa St.","Santa Clara","Michigan","Saint Louis","Alabama","Texas Tech","Tennessee","Virginia"] },
+  { name:"Harrison", bracket:"Tufts Didn't Prepare Me",    color:"#5DCAA5", initials:"HA",
+    r64pts:8,  champion:"Arizona",
+    ff:  ["Duke","Florida","Arizona","Michigan"],
+    e8:  ["Duke","Michigan St.","Florida","Illinois","Gonzaga","Miami FL","Michigan","Virginia"],
+    s16: ["Duke","St. John's","Michigan St.","Connecticut","Florida","Vanderbilt","Illinois","Houston","Arizona","Wisconsin","Texas","Gonzaga","Michigan","Iowa St.","Virginia","Alabama"],
+    r64: ["Duke","TCU","St. John's","Kansas","Louisville","Michigan St.","UCF","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","VCU","Illinois","Texas A&M","Houston","Arkansas","Wisconsin","Texas","Gonzaga","Villanova","Arizona","Miami FL","Purdue","Iowa St.","Kentucky","Michigan","Georgia","Alabama","Texas Tech","Tennessee","Virginia"] },
+  { name:"Adam",     bracket:"Pesto Boiz",                 color:"#E24B4A", initials:"AD",
+    r64pts:10, champion:"Arizona",
+    ff:  ["Duke","Florida","Arizona","Iowa St."],
+    e8:  ["Duke","Connecticut","Florida","Illinois","Gonzaga","Purdue","Michigan","Iowa St."],
+    s16: ["Duke","St. John's","Michigan St.","Connecticut","Florida","Vanderbilt","Illinois","Houston","Arizona","Wisconsin","Texas","Gonzaga","Iowa St.","Virginia","Michigan","Texas Tech"],
+    r64: ["Duke","TCU","St. John's","Kansas","Louisville","Michigan St.","UCLA","Connecticut","Florida","Iowa","Vanderbilt","Nebraska","VCU","Illinois","Texas A&M","Houston","Arkansas","Wisconsin","Texas","Gonzaga","Utah St.","Arizona","Miami FL","Purdue","Iowa St.","Santa Clara","Michigan","Saint Louis","Alabama","Texas Tech","Tennessee","Virginia"] },
+];
+
+// ── ESPN NAME NORMALIZATION ───────────────────────────────────────────────────
+const NM = {
+  "Florida Gators":"Florida","Duke Blue Devils":"Duke","Michigan Wolverines":"Michigan",
+  "Michigan State Spartans":"Michigan St.","Michigan State":"Michigan St.",
+  "Iowa State Cyclones":"Iowa St.","Iowa State":"Iowa St.",
+  "Arkansas Razorbacks":"Arkansas","Arizona Wildcats":"Arizona",
+  "Connecticut Huskies":"Connecticut","UConn Huskies":"Connecticut","UConn":"Connecticut",
+  "St. John's Red Storm":"St. John's","Houston Cougars":"Houston",
+  "Illinois Fighting Illini":"Illinois","Kansas Jayhawks":"Kansas",
+  "Kentucky Wildcats":"Kentucky","UCLA Bruins":"UCLA","Purdue Boilermakers":"Purdue",
+  "Texas Tech Red Raiders":"Texas Tech","Virginia Cavaliers":"Virginia",
+  "Gonzaga Bulldogs":"Gonzaga","Alabama Crimson Tide":"Alabama",
+  "Iowa Hawkeyes":"Iowa","VCU Rams":"VCU","Nebraska Cornhuskers":"Nebraska",
+  "Vanderbilt Commodores":"Vanderbilt","Tennessee Volunteers":"Tennessee",
+  "Texas Longhorns":"Texas","North Carolina Tar Heels":"N. Carolina",
+  "TCU Horned Frogs":"TCU","High Point Panthers":"High Point",
+  "Wisconsin Badgers":"Wisconsin","Ohio State Buckeyes":"Ohio St.",
+  "South Florida Bulls":"South Florida","North Dakota State Bison":"N. Dak. St.",
+  "Pennsylvania Quakers":"Pennsylvania","Penn Quakers":"Pennsylvania",
+  "Saint Mary's Gaels":"St. Mary's","Texas A&M Aggies":"Texas A&M",
+  "Troy Trojans":"Troy","McNeese Cowboys":"McNeese",
+  "Hawaii Rainbow Warriors":"Hawaii","Hawai'i Rainbow Warriors":"Hawaii",
+  "Howard Bison":"Howard","Siena Saints":"Siena",
+  "Miami (FL) Hurricanes":"Miami FL","Miami (FL)":"Miami FL",
+  "Saint Louis Billikens":"Saint Louis","Georgia Bulldogs":"Georgia",
+  "BYU Cougars":"BYU","Louisville Cardinals":"Louisville",
+  "Utah State Aggies":"Utah St.","Akron Zips":"Akron",
+  "Santa Clara Broncos":"Santa Clara","Villanova Wildcats":"Villanova",
+  "LIU Sharks":"LIU","Wright State Raiders":"Wright St.",
+  "Furman Paladins":"Furman","Tennessee State Tigers":"Tennessee St.",
+  "Hofstra Pride":"Hofstra","Miami (OH) RedHawks":"Miami OH",
+  "Northern Iowa Panthers":"Northern Iowa","UCF Knights":"UCF",
+  "Queens University Royals":"Queens Univ.","Prairie View A&M Panthers":"Prairie View A&M",
+  "Missouri Tigers":"Missouri","California Baptist Lancers":"Cal Baptist",
+  "Kennesaw State Owls":"Kennesaw St.","Idaho Vandals":"Idaho",
+};
+const norm = n => NM[n] || n;
+
+// ── ALL TOURNAMENT DATES TO FETCH ─────────────────────────────────────────────
+// Every day that has (or will have) tournament games.
+// The app fetches ALL of these in parallel on each refresh so no games are lost.
+const TOURNEY_DATES = [
+  "20260319","20260320",           // R64 (both days)
+  "20260321","20260322",           // R32 (both days)
+  "20260327","20260328",           // S16
+  "20260329","20260330",           // E8  (ESPN uses 29/30 or 28/29 - fetch both)
+  "20260402","20260404","20260405","20260406", // FF + Championship weekend
+];
+
+// ── LIVE STATE ────────────────────────────────────────────────────────────────
+// RES[round][team] = true (won) or false (lost)
+// round keys: r64, r32, s16, e8, ff, champ
+// r64pts is the locked Yahoo baseline; we still track r64 wins from ESPN
+// so chip display works without hardcoding
+let RES  = { r64:{}, r32:{}, s16:{}, e8:{}, ff:{}, champ:{} };
+let GAMES = [];   // all games across all dates, for the Live Games tab
+let selP = 0;
+
+// ── ROUND DETECTION ───────────────────────────────────────────────────────────
+function getRound(notes, detail, dateStr) {
+  const txt = (notes + ' ' + detail).toLowerCase();
+  if (/first round/.test(txt))                              return 'r64';
+  if (/second round|round of 32/.test(txt))                 return 'r32';
+  if (/sweet 1[6s]/.test(txt))                              return 's16';
+  if (/elite eight|elite 8/.test(txt))                      return 'e8';
+  if (/final four/.test(txt))                               return 'ff';
+  if (/national championship|championship game/.test(txt))  return 'champ';
+  // Date-based fallback (month is 0-indexed)
+  try {
+    const d = new Date(dateStr), m = d.getMonth(), day = d.getDate();
+    if (m === 2) { // March
+      if (day <= 20) return 'r64';
+      if (day <= 22) return 'r32';
+      if (day <= 28) return 's16';
+      return 'e8';
+    }
+    if (m === 3) return day <= 5 ? 'ff' : 'champ'; // April
+  } catch(e) {}
+  return null;
+}
+
+// ── ESPN FETCH ────────────────────────────────────────────────────────────────
+const BASE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?groups=100&limit=100&dates=';
+
+async function fetchDate(dateStr) {
+  const res = await fetch(BASE + dateStr);
+  const data = await res.json();
+  return data.events || [];
+}
+
+async function fetchAll() {
+  document.getElementById('pdot').style.background = '#facc15';
+  document.getElementById('utext').textContent = 'Updating...';
+  try {
+    // Fetch all tournament dates in parallel
+    const allDayEvents = await Promise.all(TOURNEY_DATES.map(d => fetchDate(d).catch(()=>[])));
+    const allEvents = allDayEvents.flat();
+
+    const newRes  = { r64:{}, r32:{}, s16:{}, e8:{}, ff:{}, champ:{} };
+    const newGames = [];
+
+    allEvents.forEach(ev => {
+      const comp  = ev.competitions[0];
+      const state = ev.status.type.state;
+      const home  = comp.competitors.find(c => c.homeAway === 'home');
+      const away  = comp.competitors.find(c => c.homeAway === 'away');
+      if (!home || !away) return;
+
+      const hN = norm(home.team.shortDisplayName || home.team.displayName);
+      const aN = norm(away.team.shortDisplayName || away.team.displayName);
+
+      newGames.push({
+        id: ev.id, hN, aN,
+        hS: parseInt(home.score)||0, aS: parseInt(away.score)||0,
+        hW: home.winner===true, aW: away.winner===true,
+        state, clock: ev.status.displayClock,
+        period: ev.status.period, date: ev.date,
+        detail: ev.status.type.shortDetail||''
+      });
+
+      if (state === 'post') {
+        const notes = ((comp.notes||[])[0]||{}).headline||'';
+        const rk = getRound(notes, ev.status.type.shortDetail||'', ev.date);
+        if (rk && newRes[rk]) {
+          if (home.winner === true)      { newRes[rk][hN]=true;  newRes[rk][aN]=false; }
+          else if (away.winner === true) { newRes[rk][aN]=true;  newRes[rk][hN]=false; }
+        }
+      }
+    });
+
+    RES   = newRes;
+    GAMES = newGames;
+    document.getElementById('utext').textContent = 'Updated ' + new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+    document.getElementById('pdot').style.background = '#4ade80';
+    renderAll();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('utext').textContent = 'Error — retry';
+    document.getElementById('pdot').style.background = '#f87171';
+  }
+}
+
+// ── SCORING ───────────────────────────────────────────────────────────────────
+function calcScore(p) {
+  let pts = p.r64pts;
+  // r64 is locked baseline — ESPN r64 results only affect chip display
+  p.s16.forEach(t => { if (RES.r32[t])  pts += 2; });
+  p.e8.forEach(t  => { if (RES.s16[t])  pts += 4; });
+  p.ff.forEach(t  => { if (RES.e8[t])   pts += 8; });
+  if (RES.ff[p.champion])    pts += 16;
+  if (RES.champ[p.champion]) pts += 32;
+  return pts;
+}
+
+function maxPts(p) {
+  let pts = calcScore(p);
+  const alive = t => RES.r64[t] !== false; // false = lost R64
+  p.s16.forEach(t => { if (RES.r32[t]===undefined  && alive(t)) pts += 2; });
+  p.e8.forEach(t  => { if (RES.s16[t]===undefined  && alive(t)) pts += 4; });
+  p.ff.forEach(t  => { if (RES.e8[t]===undefined   && alive(t)) pts += 8; });
+  if (RES.ff[p.champion]===undefined    && alive(p.champion)) pts += 16;
+  if (RES.champ[p.champion]===undefined && alive(p.champion)) pts += 32;
+  return pts;
+}
+
+// ── CHIP STATUS ───────────────────────────────────────────────────────────────
+function chipCls(t, rnd) {
+  // Eliminated in R64?
+  if (RES.r64[t] === false) return 'cw';
+
+  if (rnd === 'champ') {
+    if (RES.champ[t]===true)  return 'cc';
+    if (RES.champ[t]===false || RES.ff[t]===false || RES.e8[t]===false || RES.s16[t]===false || RES.r32[t]===false) return 'cw';
+    return GAMES.find(g=>(g.hN===t||g.aN===t)&&g.state==='in') ? 'cl' : 'cp';
+  }
+  const r = RES[rnd] && RES[rnd][t];
+  if (r===true)  return 'cc';
+  if (r===false) return 'cw';
+  if (GAMES.find(g=>(g.hN===t||g.aN===t)&&g.state==='in')) return 'cl';
+  return 'cp';
+}
+
+// ── WHO PICKED THIS TEAM ──────────────────────────────────────────────────────
+function whoHas(t) {
+  return POOL.filter(p=>[...p.r64,...p.s16,...p.e8,...p.ff,p.champion].includes(t)).map(p=>p.name);
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderAll() {
+  renderStandings(); renderGames(); renderPicks(); renderCompare();
+}
+
+function renderStandings() {
+  const sc = POOL.map(p=>({...p,pts:calcScore(p),max:maxPts(p)})).sort((a,b)=>b.pts-a.pts);
+  const top = sc[0].pts;
+  document.getElementById('metrics').innerHTML = [
+    ['Leader',top+' pts'],['Gap',(top-sc[sc.length-1].pts)+' pts'],['Entries','7'],['Round','→']
+  ].map(([l,v])=>`<div class="metric"><div class="mlbl">${l}</div><div class="mval">${v}</div></div>`).join('');
+
+  document.getElementById('slist').innerHTML = sc.map((p,i)=>{
+    const bon = p.pts - p.r64pts;
+    const cOk = RES.champ[p.champion]!==false && RES.r64[p.champion]!==false;
+    const cc  = RES.champ[p.champion]===true ? 'cc' : !cOk ? 'cw' : 'cp';
+    return `<div class="srow">
+      <div class="srnk">${i+1}</div>
+      <div class="av" style="width:36px;height:36px;background:${p.color}22;color:${p.color};font-size:11px">${p.initials}</div>
+      <div class="sinf">
+        <div class="snm">${p.name}</div>
+        <div class="sbk">${p.bracket}</div>
+        <div class="bwrap"><div class="bfill" style="width:${Math.round(p.pts/Math.max(top,1)*100)}%;background:${p.color}"></div></div>
+      </div>
+      <div class="spts"><div class="pbig">${p.pts}</div><div class="psub">base ${p.r64pts}${bon>0?' +'+bon:''}</div></div>
+      <div class="schamp"><span class="chip ${cc}">${p.champion}</span><div style="font-size:10px;color:#999;margin-top:3px">max ${p.max}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderGames() {
+  // Show only tournament games (teams we know about)
+  const allPicked = new Set(POOL.flatMap(p=>[...p.r64,...p.s16,...p.e8,...p.ff,p.champion]));
+  const tGames = GAMES.filter(g => allPicked.has(g.hN) || allPicked.has(g.aN));
+  if (!tGames.length) { document.getElementById('gcontent').innerHTML='<div style="text-align:center;padding:3rem;color:#999">No tournament games yet.</div>'; return; }
+
+  const live = tGames.filter(g=>g.state==='in');
+  const done = tGames.filter(g=>g.state==='post').sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,30);
+  const pre  = tGames.filter(g=>g.state==='pre').sort((a,b)=>new Date(a.date)-new Date(b.date)).slice(0,20);
+
+  function gc(g) {
+    const isL=g.state==='in', isPre=g.state==='pre';
+    const stat=isPre?new Date(g.date).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}):isL?g.clock+' · P'+g.period:'Final';
+    const aP=whoHas(g.aN).join(', ')||'—', hP=whoHas(g.hN).join(', ')||'—';
+    return `<div class="gcard ${isL?'live':''}">
+      <div class="gstat">${isL?'<div class="ldot"></div>':''}<span style="color:${isL?'#2563eb':'#999'}">${stat}</span></div>
+      <div class="tln"><span class="tnm ${g.aW?'w':''}">${g.aN}</span>${!isPre?`<span class="tsc ${g.aW?'w':''}">${g.aS}</span>`:''}</div>
+      <div class="tpk">${aP}</div>
+      <div class="tln"><span class="tnm ${g.hW?'w':''}">${g.hN}</span>${!isPre?`<span class="tsc ${g.hW?'w':''}">${g.hS}</span>`:''}</div>
+      <div class="tpk">${hP}</div>
+    </div>`;
+  }
+  function sec(lbl,gs){ return gs.length?`<div class="slbl">${lbl}</div><div class="ggrid">${gs.map(gc).join('')}</div>`:''; }
+  document.getElementById('gcontent').innerHTML = sec('Live now',live)+sec('Completed',done)+sec('Upcoming',pre);
+}
+
+function renderPicks() {
+  document.getElementById('ptabs').innerHTML = POOL.map((p,i)=>
+    `<button class="ptab ${i===selP?'active':''}" onclick="selPlayer(${i})"
+      style="border-color:${i===selP?p.color:'#e8e6e0'};color:${i===selP?p.color:'#555'};background:${i===selP?p.color+'11':'#fff'}">
+      <span style="width:18px;height:18px;border-radius:50%;background:${p.color}33;color:${p.color};display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700">${p.initials}</span>
+      ${p.name}</button>`).join('');
+  const p=POOL[selP], pts=calcScore(p);
+  function row(lbl,items,rnd){ return `<div class="plbl">${lbl}</div><div>${items.map(t=>`<span class="chip ${chipCls(t,rnd)}">${t}</span>`).join('')}</div>`; }
+  document.getElementById('pcontent').innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f0f0ee">
+        <div class="av" style="width:44px;height:44px;background:${p.color}22;color:${p.color};font-size:14px">${p.initials}</div>
+        <div style="flex:1"><div style="font-weight:700;font-size:15px">${p.name}</div><div style="font-size:12px;color:#999">${p.bracket}</div></div>
+        <div style="text-align:right"><div style="font-size:28px;font-weight:700;line-height:1">${pts}</div><div style="font-size:11px;color:#999">base ${p.r64pts} &middot; +${pts-p.r64pts}</div></div>
+      </div>
+      ${row('Champion — 32 pts',[p.champion],'champ')}
+      ${row('Final Four — 8 pts each',p.ff,'e8')}
+      ${row('Elite Eight — 4 pts each',p.e8,'s16')}
+      ${row('Sweet Sixteen — 2 pts each',p.s16,'r32')}
+      <div style="margin-top:12px;font-size:11px;display:flex;gap:14px;flex-wrap:wrap">
+        <span style="color:#16a34a">&#10003; Won</span>
+        <span style="color:#dc2626">&#10007; Eliminated</span>
+        <span style="color:#2563eb">&#9654; Live</span>
+        <span style="color:#888">&#9675; Upcoming</span>
+      </div>
+    </div>`;
+}
+
+function renderCompare() {
+  const sc=POOL.map(p=>({...p,pts:calcScore(p)}));
+  const regions=['East','South','West','Midwest'];
+  const thead='<tr><th>Region</th>'+POOL.map(p=>`<th>${p.name}</th>`).join('')+'</tr>';
+  const tbody=regions.map((reg,ri)=>{
+    const vals=POOL.map(p=>p.ff[ri]);
+    const u=[...new Set(vals)];
+    return `<tr><td>${reg}</td>${vals.map(v=>`<td><span class="badge ${u.length===1?'ba':u.length===vals.length?'bu':'bs'}">${v}</span></td>`).join('')}</tr>`;
+  }).join('')+'<tr style="border-top:2px solid #e5e5e5"><td style="font-weight:600">Score</td>'+
+    POOL.map(p=>`<td style="font-weight:700;font-size:16px">${sc.find(s=>s.name===p.name).pts}</td>`).join('')+'</tr>';
+  document.getElementById('ctable').innerHTML=`<table class="ctbl"><thead>${thead}</thead><tbody>${tbody}</tbody></table>`;
+  const cm={};
+  POOL.forEach(p=>{(cm[p.champion]=cm[p.champion]||[]).push(p.name);});
+  document.getElementById('cgrid').innerHTML=Object.entries(cm).map(([t,ns])=>
+    `<div style="background:#f8f8f6;border-radius:7px;padding:9px 11px"><div style="font-weight:600;font-size:13px">${t}</div><div style="font-size:11px;color:#999;margin-top:2px">${ns.join(', ')}</div></div>`).join('');
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function selPlayer(i){ selP=i; renderPicks(); }
+
+// Render immediately (scores = r64pts baselines until ESPN loads), then fetch
+renderAll();
+fetchAll();
+setInterval(fetchAll, 60000);
+</script>
+</body>
+</html>
